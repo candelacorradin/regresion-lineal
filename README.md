@@ -7,7 +7,7 @@ Es HTML, CSS y JavaScript sin dependencias: las tipografías están incluidas, a
 ## Cómo abrirla
 
 - **Sin instalar nada:** abrir `index.html` con doble clic (Chrome, Edge o Firefox).
-- **Con GitHub Pages:** en el repositorio, *Settings → Pages → Deploy from a branch → `main` / root*. Queda publicada en `https://<usuario>.github.io/<repositorio>/`.
+- **En línea (GitHub Pages):** `https://candelacorradin.github.io/regresion-lineal/`.
 
 ## Antes de presentar
 

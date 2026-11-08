@@ -14,7 +14,7 @@ Es HTML, CSS y JavaScript sin dependencias: las tipografías están incluidas, a
 Opcional: poner los nombres del grupo en `js/config.js`.
 
 ```js
-integrantes: ['Ana', 'Bruno', 'Carla', 'Diego'],
+integrantes: ['Ana', 'Bruno', 'Carla', 'Diego'],   // por defecto: Participante 1 a 4
 ```
 
 Los nombres no se proyectan: solo aparecen en las notas del orador y en el modo presentador.

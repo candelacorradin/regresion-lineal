@@ -105,7 +105,7 @@
 
   function whoFor(i) {
     const part = +slides[i].dataset.part;
-    return part ? `Parte ${part} · ${C.integrantes[part - 1]}` : 'Respaldo';
+    return part ? C.integrantes[part - 1] : 'Respaldo';
   }
 
   // Notas en la misma pantalla

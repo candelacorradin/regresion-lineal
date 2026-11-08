@@ -197,20 +197,6 @@ h1 { font-size: 138px; line-height: 0.95; font-weight: 680; letter-spacing: -0.0
 .cover-date { position: absolute; left: 104px; bottom: 74px; margin: 0; font-size: 22px; color: #c6cfe2; }
 .cover-hint { position: absolute; right: 104px; top: 84px; margin: 0; font-size: 17px; color: #8f9bb6; }
 
-/* ---------- 2 · Recorrido ---------- */
-.timeline { margin-top: 70px; }
-.timeline-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 14px; }
-.timeline-bar span { border-radius: 7px; background: var(--navy); }
-.timeline-bar span:nth-child(2) { background: var(--navy-3); }
-.timeline-bar span:nth-child(3) { background: #4a5a80; }
-.timeline-bar span:nth-child(4) { background: #6d7b9c; }
-.timeline-ticks { display: flex; justify-content: space-between; color: var(--muted); font-size: 17px; margin-top: 10px; font-variant-numeric: tabular-nums; }
-.timeline-parts { list-style: none; padding: 0; margin: 46px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
-.timeline-parts li { border-top: 2px solid var(--line); padding-top: 22px; }
-.part-num { font-family: var(--display); font-size: 68px; font-weight: 640; color: var(--navy); line-height: 1; }
-.timeline-parts h3 { margin: 18px 0 12px; }
-.timeline-parts p { margin: 0; color: var(--muted); font-size: 22px; }
-
 /* ---------- 3 · Evolución ---------- */
 .big-stat { border-left: 6px solid; padding: 2px 0 4px 22px; margin-bottom: 6px; }
 .big-stat.sal { border-color: var(--sal); } .big-stat.ipc { border-color: var(--ipc); }

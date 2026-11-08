@@ -11,13 +11,13 @@ Es HTML, CSS y JavaScript sin dependencias: las tipografías están incluidas, a
 
 ## Antes de presentar
 
-Editar `js/config.js` con los nombres del grupo:
+Opcional: poner los nombres del grupo en `js/config.js`.
 
 ```js
 integrantes: ['Ana', 'Bruno', 'Carla', 'Diego'],
 ```
 
-Los nombres aparecen en la diapositiva de recorrido, en las notas y en el modo presentador.
+Los nombres no se proyectan: solo aparecen en las notas del orador y en el modo presentador.
 
 ## Atajos
 

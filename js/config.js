@@ -1,6 +1,6 @@
-// Datos del grupo: editá estos valores y se actualizan en toda la presentación.
+// Datos del grupo: se usan en las notas del orador y en el modo presentador (no se proyectan).
 window.CONFIG = {
-  integrantes: ['[Nombre 1]', '[Nombre 2]', '[Nombre 3]', '[Nombre 4]'],
+  integrantes: ['integrante 1', 'integrante 2', 'integrante 3', 'integrante 4'],
   fecha: '11 de noviembre de 2026',
   materia: 'Estadística',
   // Minutos por integrante (para el reloj del modo presentador)

@@ -269,7 +269,7 @@ h1 { font-size: 138px; line-height: 0.95; font-weight: 680; letter-spacing: -0.0
 
 /* ---------- 8 · Resultado ---------- */
 .result { display: grid; grid-template-columns: 640px 1fr; gap: 70px; align-items: center; height: 100%; }
-.huge { display: block; font-family: var(--display); font-size: 230px; font-weight: 680; line-height: 0.95; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.huge { display: block; white-space: nowrap; font-family: var(--display); font-size: 230px; font-weight: 680; line-height: 0.95; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
 .result-sub { display: block; margin-top: 14px; font-size: 24px; color: #c6cfe2; }
 .mini-scale { position: relative; margin-top: 46px; width: 520px; }
 .mini-track { height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--sal), #4a5a80 50%, var(--ipc)); }
@@ -343,15 +343,16 @@ h1 { font-size: 138px; line-height: 0.95; font-weight: 680; letter-spacing: -0.0
 .res-val.pos { color: var(--navy); } .res-val.neg { color: #7d8597; }
 
 /* ---------- 15 · R² ---------- */
-.r2 { display: grid; grid-template-columns: 640px 1fr; gap: 70px; align-items: center; margin-top: 30px; }
+.r2 { display: grid; grid-template-columns: 720px 1fr; gap: 60px; align-items: center; margin-top: 10px; }
+.r2 .huge { font-size: 190px; }
 .r2-num .seg { margin-top: 30px; }
 .r2-lead { font-size: 28px; line-height: 1.4; margin: 0 0 24px; color: #f2efe8; }
 .r2-lead b { color: var(--sal-soft); }
 .r2-formula { font-family: var(--display); color: var(--ipc-soft); font-size: 26px; margin: 0 0 10px; }
 .r2-ss { font-size: 19px; color: #a6b1c8; margin: 0; font-variant-numeric: tabular-nums; }
-.r2-bar { position: absolute; left: 104px; right: 104px; bottom: 150px; height: 26px; background: var(--ipc-soft); border-radius: 13px; overflow: hidden; }
+.r2-bar { margin-top: 56px; height: 26px; background: var(--ipc-soft); border-radius: 13px; overflow: hidden; }
 .r2-fill { height: 100%; width: 0; background: var(--sal-soft); border-radius: 13px 0 0 13px; transition: width 1.3s cubic-bezier(.2,.7,.2,1); }
-.r2-legend { position: absolute; left: 104px; right: 104px; bottom: 110px; display: flex; justify-content: space-between; font-size: 19px; color: #c6cfe2; }
+.r2-legend { margin-top: 12px; display: flex; justify-content: space-between; font-size: 19px; color: #c6cfe2; }
 
 /* ---------- 16 · Excel ---------- */
 .xl-table { width: 100%; border-collapse: collapse; font-size: 22px; }

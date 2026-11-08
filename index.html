@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Regresión y correlación · Salarios e inflación</title>
+  <meta name="description" content="Presentación interactiva: correlación y regresión lineal simple con el índice de salarios y el IPC del INDEC, enero 2025 a agosto 2026.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314213D'/%3E%3Cpath d='M6 24 L26 8' stroke='%232F5DA8' stroke-width='3'/%3E%3Ccircle cx='10' cy='22' r='2.5' fill='%23E0692E'/%3E%3Ccircle cx='16' cy='15' r='2.5' fill='%23E0692E'/%3E%3Ccircle cx='23' cy='11' r='2.5' fill='%23E0692E'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="deck" id="deck" aria-live="polite">
+    <div class="stage" id="stage">
+
+      <!-- 1 · PORTADA -->
+      <section class="slide dark" data-id="portada" data-part="1" data-title="Portada">
+        <div class="cover-chart" id="cover-chart" aria-hidden="true"></div>
+        <div class="cover-text">
+          <p class="kicker">Trabajo final de <span data-config="materia"></span></p>
+          <h1>Regresión y<br>correlación</h1>
+          <p class="cover-sub">¿Los salarios acompañan a la inflación? Índice de salarios e IPC del INDEC, enero de 2025 a agosto de 2026.</p>
+        </div>
+        <p class="cover-date" data-config="fecha"></p>
+        <p class="cover-hint">Usá <kbd>→</kbd> para avanzar · <kbd>?</kbd> para ver los atajos</p>
+        <aside class="notes">
+          <p><b>Presentar al grupo y el tema.</b> “Hoy vamos a explicar correlación y regresión con un tema que nos toca a todos: la relación entre los precios y los salarios en Argentina. Usamos los datos oficiales del INDEC de los últimos 20 meses, de enero de 2025 a agosto de 2026.”</p>
+          <p>Duración total aproximada: 20 minutos, unos 5 minutos por integrante. Las dos líneas del fondo son los datos reales que vamos a analizar.</p>
+        </aside>
+      </section>
+
+      <!-- 2 · RECORRIDO -->
+      <section class="slide" data-id="recorrido" data-part="1" data-title="Quién presenta cada parte">
+        <header class="slide-head">
+          <h2>Quién presenta cada parte</h2>
+          <p class="lede">Veinte minutos, cuatro partes. Al final quedan unos minutos para preguntas.</p>
+        </header>
+        <div class="timeline">
+          <div class="timeline-bar" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="timeline-ticks" aria-hidden="true"><span>0 min</span><span>5</span><span>10</span><span>15</span><span>20 min</span></div>
+          <ol class="timeline-parts">
+            <li><span class="part-num">1</span><h3 data-integrante="1"></h3><p>Presentación del caso y los datos. Diferencia entre correlación y regresión.</p></li>
+            <li><span class="part-num">2</span><h3 data-integrante="2"></h3><p>Diagrama de dispersión. Coeficiente de correlación de Pearson y su interpretación.</p></li>
+            <li><span class="part-num">3</span><h3 data-integrante="3"></h3><p>Regresión lineal simple: la ecuación de la recta, sus características y la predicción.</p></li>
+            <li><span class="part-num">4</span><h3 data-integrante="4"></h3><p>Coeficiente de determinación R². Cómo hacerlo en Excel. Guía para el TP6 y cierre.</p></li>
+          </ol>
+        </div>
+        <aside class="notes">
+          <p>Contar rápidamente cómo se divide la exposición. La barra de abajo de cada diapositiva muestra en qué parte estamos. Al final quedan unos minutos para preguntas del curso.</p>
+        </aside>
+      </section>
+
+      <!-- 3 · PRECIOS Y SALARIOS -->
+      <section class="slide" data-id="evolucion" data-part="1" data-title="Precios y salarios, mes a mes">
+        <header class="slide-head">
+          <h2>Precios y salarios, mes a mes</h2>
+        </header>
+        <div class="split split-chart">
+          <div class="chart-box" id="evolucion-chart"></div>
+          <div class="side">
+            <div class="big-stat sal">
+              <span class="big-label">Índice de salarios</span>
+              <span class="big-value" id="evo-sal">172,8</span>
+            </div>
+            <div class="big-stat ipc">
+              <span class="big-label">Índice de precios (IPC)</span>
+              <span class="big-value" id="evo-ipc">159,5</span>
+            </div>
+            <p class="side-text">En 20 meses los precios subieron <b class="c-ipc">59,5&nbsp;%</b> y los salarios <b class="c-sal">72,8&nbsp;%</b> (promedio de todos los trabajadores).</p>
+            <p class="side-note fragment" data-step="1">La zona sombreada es la diferencia a favor de los salarios. Ojo: el índice total incluye a los no registrados, cuyos salarios subieron más.</p>
+            <p class="hint">Pasá el mouse por el gráfico para ver cada mes.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><b>Contexto para enganchar al curso.</b> Llevamos las dos series del INDEC a una misma base: diciembre de 2024 = 100. Así se puede comparar: en agosto de 2026 el índice de precios llegó a 159,5 (los precios subieron 59,5&nbsp;%) y el índice de salarios a 172,8 (los salarios subieron 72,8&nbsp;%).</p>
+          <p><b>→ (paso 1):</b> aparece la zona entre las dos líneas. Ojo: el índice de salarios total incluye a los asalariados no registrados, cuyos salarios subieron más; los registrados del sector privado y público subieron menos.</p>
+          <p>La pregunta del trabajo: ¿qué tan relacionados están los salarios con los precios y cuánto suben los salarios por cada punto que suben los precios?</p>
+        </aside>
+      </section>
+
+      <!-- 4 · EL CASO DE ESTUDIO -->
+      <section class="slide" data-id="datos" data-part="1" data-title="Dos índices del INDEC, 20 meses">
+        <header class="slide-head">
+          <h2>Dos índices del INDEC, 20 meses</h2>
+        </header>
+        <div class="split split-data">
+          <div class="side">
+            <div class="var-card ipc">
+              <span class="var-tag">Variable X · independiente</span>
+              <h3>Índice de precios al consumidor (IPC)</h3>
+              <p>Nivel general, total nacional. Mide cuánto suben los precios.</p>
+            </div>
+            <div class="var-card sal">
+              <span class="var-tag">Variable Y · dependiente</span>
+              <h3>Índice de salarios</h3>
+              <p>Total: privados registrados, públicos y no registrados.</p>
+            </div>
+            <div class="chain-card" id="chain-card" aria-live="polite"></div>
+            <p class="hint">Tocá un mes de la tabla para ver cómo se calcula su índice.</p>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table" id="data-table">
+              <thead><tr><th>Mes</th><th>Inflación</th><th>IPC (X)</th><th>Suba salarios</th><th>Salarios (Y)</th></tr></thead>
+              <tbody></tbody>
+            </table>
+            <p class="caption">Base diciembre 2024 = 100. Las variaciones (%) son las que publica el INDEC.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><b>Explicar qué mide cada variable.</b> El IPC mide la evolución de los precios de una canasta de bienes y servicios; el índice de salarios mide la evolución de los salarios. El INDEC publica cada mes la variación porcentual de los dos.</p>
+          <p>Para compararlos los llevamos a una misma base (diciembre de 2024 = 100) encadenando las variaciones: índice del mes = índice del mes anterior × (1 + variación ÷ 100). <b>Interacción:</b> tocar enero de 2025 en la tabla: la inflación fue 2,2&nbsp;%, así que el IPC pasa de 100 a 102,2. Tocar otro mes para mostrar que se repite la cuenta.</p>
+          <p>Cada observación es un mes: 20 meses. Elegimos el IPC como X porque queremos ver cómo responden los salarios (Y) a los precios.</p>
+        </aside>
+      </section>
+
+      <!-- 5 · CONCEPTOS -->
+      <section class="slide" data-id="conceptos" data-part="1" data-title="Correlación y regresión: dos preguntas distintas">
+        <header class="slide-head">
+          <h2>Correlación y regresión: dos preguntas distintas</h2>
+        </header>
+        <div class="concepts">
+          <div class="concept">
+            <h3 class="c-ipc-dark">Correlación</h3>
+            <p class="q">¿Están relacionadas? ¿Cuán fuerte es la relación y en qué sentido?</p>
+            <ul>
+              <li>Mide el grado de asociación lineal.</li>
+              <li>Las variables son simétricas: da igual cuál es X.</li>
+              <li>Resultado: un número, <b>r</b>, entre −1 y 1.</li>
+            </ul>
+            <div class="swap-readout"><span>r</span><b id="swap-r">0,996</b><em id="swap-r-note">no cambia</em></div>
+          </div>
+          <div class="concept">
+            <h3 class="c-sal">Regresión</h3>
+            <p class="q">¿Cómo cambia Y cuando cambia X? ¿Cuánto vale Y para un X dado?</p>
+            <ul>
+              <li>Describe la relación con una ecuación.</li>
+              <li>Hay que distinguir: X explica, Y es explicada.</li>
+              <li>Resultado: la recta <b>ŷ = a + b·x</b>, que permite estimar.</li>
+            </ul>
+            <div class="swap-readout"><span>b</span><b id="swap-b">1,149</b><em id="swap-b-note">pendiente de Y sobre X</em></div>
+          </div>
+          <div class="swap-demo">
+            <div class="chart-box" id="swap-chart"></div>
+            <button class="btn" id="swap-btn" type="button">Intercambiar X e Y</button>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><b>Idea central:</b> la correlación responde “¿hay relación y qué tan fuerte?”; la regresión responde “¿cuál es esa relación y cómo la uso para estimar?”.</p>
+          <p><b>Interacción:</b> apretar “Intercambiar X e Y” (o →). El gráfico gira: r sigue en 0,996, pero la pendiente pasa de 1,149 a 0,863. En la correlación intercambiar X e Y no cambia r; en la regresión sí importa: la recta de Y sobre X no es la misma que la de X sobre Y.</p>
+          <p>Normalmente primero miramos la correlación (si es débil, no tiene sentido ajustar una recta) y después hacemos la regresión. Pasar la palabra a <span data-integrante="2"></span>.</p>
+        </aside>
+      </section>
+
+      <!-- 6 · DIAGRAMA DE DISPERSIÓN -->
+      <section class="slide" data-id="dispersion" data-part="2" data-title="Cada punto es un mes">
+        <header class="slide-head">
+          <h2>Cada punto es un mes</h2>
+        </header>
+        <div class="split split-chart">
+          <div class="chart-box" id="dispersion-chart"></div>
+          <div class="side">
+            <p class="side-text">Ubicamos cada observación como un par <b>(x, y)</b>: X en el eje horizontal y Y en el vertical.</p>
+            <p class="side-text">Al mirar la nube de puntos nos preguntamos:</p>
+            <dl class="checks">
+              <div><dt>Forma</dt><dd>¿Sigue una línea recta?</dd><dd class="answer fragment" data-step="1">Sí, casi recta.</dd></div>
+              <div><dt>Sentido</dt><dd>¿Sube o baja?</dd><dd class="answer fragment" data-step="2">Sube: es creciente.</dd></div>
+              <div><dt>Fuerza</dt><dd>¿Los puntos están cerca de esa línea?</dd><dd class="answer fragment" data-step="3">Muy cerca.</dd></div>
+            </dl>
+            <p class="verdict fragment" data-step="4">Relación lineal, creciente y casi perfecta.</p>
+            <button class="btn ghost" id="replay-dispersion" type="button">Volver a dibujar los puntos</button>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><b>El diagrama de dispersión es siempre el primer paso:</b> antes de calcular cualquier número, miramos los datos. Los puntos aparecen en orden: 20 puntos, uno por mes, desde enero de 2025 (abajo a la izquierda) hasta agosto de 2026 (arriba a la derecha).</p>
+          <p><b>→ tres veces:</b> se responde forma, sentido y fuerza. <b>→</b> otra vez: conclusión. Los puntos forman casi una línea recta: cuando el índice de precios es más alto, el de salarios también.</p>
+          <p>Gráfico hecho en Excel: Insertar → Gráfico de dispersión, seleccionando las columnas de los dos índices.</p>
+        </aside>
+      </section>
+
+      <!-- 7 · PEARSON -->
+      <section class="slide" data-id="pearson" data-part="2" data-title="r resume la relación lineal en un número">
+        <header class="slide-head">
+          <h2>r resume la relación lineal en un número</h2>
+        </header>
+        <div class="formula-line">r = Σ(x − x̄)(y − ȳ) ÷ √[ Σ(x − x̄)² · Σ(y − ȳ)² ]</div>
+        <div class="split split-pearson">
+          <div class="pearson-left">
+            <div class="r-scale" id="r-scale">
+              <div class="r-gradient"></div>
+              <div class="r-marker" id="r-marker"><span id="r-marker-val">0,80</span></div>
+              <div class="r-ends"><span>−1</span><span>0</span><span>+1</span></div>
+            </div>
+            <div class="r-cases">
+              <div class="r-case" data-case="neg"><h4 class="c-sal">r cerca de −1</h4><p>Relación inversa fuerte: si X sube, Y baja.</p></div>
+              <div class="r-case" data-case="zero"><h4>r cerca de 0</h4><p>No hay relación lineal (puede haber otra forma).</p></div>
+              <div class="r-case" data-case="pos"><h4 class="c-ipc-dark">r cerca de +1</h4><p>Relación directa fuerte: si X sube, Y sube.</p></div>
+            </div>
+            <label class="slider">
+              <span>Mové r y mirá cómo cambia la nube</span>
+              <input type="range" id="r-slider" min="-1" max="1" step="0.01" value="0.8">
+            </label>
+            <div class="btn-row">
+              <button class="btn ghost small" data-r="-0.95" type="button">−0,95</button>
+              <button class="btn ghost small" data-r="-0.5" type="button">−0,5</button>
+              <button class="btn ghost small" data-r="0" type="button">0</button>
+              <button class="btn ghost small" data-r="0.5" type="button">0,5</button>
+              <button class="btn ghost small" data-r="0.95" type="button">0,95</button>
+              <button class="btn small" id="r-curve" type="button">Una curva con r = 0</button>
+            </div>
+          </div>
+          <div class="pearson-right">
+            <div class="chart-box" id="pearson-chart"></div>
+            <p class="strength" id="r-strength">Relación directa fuerte</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p>El signo de r indica el sentido de la relación y el valor absoluto indica la fuerza. Una guía habitual (confirmar con la que usa la cátedra): |r| menor a 0,3 débil; entre 0,3 y 0,7 moderada; mayor a 0,7 fuerte.</p>
+          <p><b>Interacción:</b> mover el control de r hacia −1, 0 y +1 para que el curso vea cómo se ordena o se desordena la nube. r no tiene unidades, así que da lo mismo medir en °C o °F.</p>
+          <p><b>Importante:</b> apretar “Una curva con r = 0”. Hay una relación clarísima, pero no es lineal: r = 0 no significa “no hay ninguna relación”, sino que no hay relación LINEAL.</p>
+        </aside>
+      </section>
+
+      <!-- 8 · NUESTRO RESULTADO -->
+      <section class="slide dark" data-id="resultado" data-part="2" data-title="Nuestro resultado: r = 0,996">
+        <div class="result">
+          <div class="result-num">
+            <p class="kicker">Nuestro resultado</p>
+            <span class="huge c-ipc-soft" id="result-r">0,996</span>
+            <span class="result-sub">r de Pearson · n = 20 meses</span>
+            <div class="mini-scale" aria-hidden="true"><div class="mini-track"></div><div class="mini-dot" id="result-dot"></div><div class="r-ends"><span>−1</span><span>0</span><span>+1</span></div></div>
+          </div>
+          <div class="result-text">
+            <h2>Correlación positiva y casi perfecta</h2>
+            <p>Los meses con precios más altos son también los de salarios más altos.</p>
+            <div class="calc fragment" data-step="1">
+              <p class="calc-title">La cuenta a mano</p>
+              <p>Σ(x − x̄)(y − ȳ) = <b id="res-sxy"></b></p>
+              <p>Σ(x − x̄)² = <b id="res-sxx"></b> · Σ(y − ȳ)² = <b id="res-syy"></b></p>
+              <p>r = <span id="res-frac"></span></p>
+            </div>
+            <div class="callout fragment" data-step="2">
+              <h3>¿Tan fuerte es la relación?</h3>
+              <p>Cuidado: los dos índices suben con el paso del tiempo. Eso solo ya empuja r hacia 1.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p>Calculado en Excel con =PEARSON(rango X; rango Y). <b>→:</b> aparece la cuenta a mano: Σ(x−x̄)(y−ȳ) = 7.226,90; Σ(x−x̄)² = 6.289,99; Σ(y−ȳ)² = 8.371,32. Entonces r = 7.226,90 ÷ √(6.289,99 × 8.371,32) = 7.226,90 ÷ 7.256,42 ≈ 0,996.</p>
+          <p>Es positivo y casi 1: la relación lineal entre los niveles es muy fuerte. <b>→:</b> pero hay una trampa, que mostramos en la próxima diapositiva: cuando dos variables crecen con el tiempo, casi siempre dan una correlación altísima, aunque mes a mes no se muevan juntas.</p>
+        </aside>
+      </section>
+
+      <!-- 9 · LA TRAMPA -->
+      <section class="slide" data-id="trampa" data-part="2" data-title="La trampa de las tendencias">
+        <header class="slide-head">
+          <h2 id="trampa-title">Los mismos 20 meses, otra pregunta</h2>
+        </header>
+        <div class="split split-chart">
+          <div class="chart-box" id="trampa-chart"></div>
+          <div class="side">
+            <div class="seg" role="group" aria-label="Qué comparar">
+              <button type="button" class="seg-btn is-on" data-mode="niveles">Niveles</button>
+              <button type="button" class="seg-btn" data-mode="mensual">Variación mensual</button>
+            </div>
+            <div class="r-live">
+              <span>r =</span><b id="trampa-r">0,996</b>
+            </div>
+            <p class="side-text" id="trampa-text">Comparando los niveles, la relación parece casi perfecta.</p>
+            <div class="callout light fragment" data-step="2">
+              <h3>Conclusión</h3>
+              <p>Un r alto entre series que crecen en el tiempo no prueba que una cause a la otra.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><b>Este es el punto más interesante del trabajo.</b> Arrancamos con los niveles: r = 0,996.</p>
+          <p><b>→ (o el botón “Variación de cada mes”):</b> los puntos viajan a su nueva posición. Con los mismos datos del INDEC, si correlacionamos la inflación de cada mes con la suba de salarios de ese mismo mes, r da 0,05: prácticamente cero, no hay relación lineal.</p>
+          <p>¿Por qué con los niveles daba 0,996? Porque los dos índices crecen sin parar con el tiempo, y esa tendencia común hace que la correlación sea altísima. Además, los salarios suelen ajustarse con retraso: las paritarias se negocian después de que suben los precios.</p>
+          <p><b>→:</b> moraleja: correlación no implica causalidad, y en series de tiempo hay que tener mucho cuidado con las tendencias. Este cálculo también está en el Excel (hoja Resultados, abajo). Pasar la palabra a <span data-integrante="3"></span>.</p>
+        </aside>
+      </section>
+
+      <!-- 10 · REGRESIÓN LINEAL SIMPLE -->
+      <section class="slide" data-id="minimos" data-part="3" data-title="La recta que mejor se ajusta a los puntos">
+        <header class="slide-head">
+          <h2>La recta que mejor se ajusta a los puntos</h2>
+        </header>
+        <div class="split split-ls">
+          <div class="side">
+            <p class="eq-big">ŷ = a + b·x</p>
+            <dl class="defs">
+              <div><dt>ŷ</dt><dd>valor estimado de Y</dd></div>
+              <div><dt class="c-ipc-dark">b</dt><dd>pendiente: cuánto cambia Y por cada unidad de X</dd></div>
+              <div><dt class="c-sal">a</dt><dd>ordenada al origen: valor de ŷ cuando x = 0</dd></div>
+            </dl>
+            <div class="ls-card">
+              <h3>Método de mínimos cuadrados</h3>
+              <p>Elige a y b para que la suma de los errores al cuadrado, Σ(y − ŷ)², sea la menor posible.</p>
+              <p class="mono c-ipc-dark">b = Σ(x − x̄)(y − ȳ) ÷ Σ(x − x̄)²</p>
+              <p class="mono c-sal">a = ȳ − b · x̄</p>
+              <div class="fragment" data-step="1">
+                <p class="mono">b = <span id="ls-b-calc"></span></p>
+                <p class="mono">a = <span id="ls-a-calc"></span></p>
+              </div>
+            </div>
+          </div>
+          <div class="ls-play">
+            <div class="chart-box" id="ls-chart"></div>
+            <div class="ls-controls">
+              <label class="slider compact"><span>Pendiente b <b id="ls-b-val"></b></span><input type="range" id="ls-b" min="0.6" max="1.7" step="0.001"></label>
+              <label class="slider compact"><span>Ordenada a <b id="ls-a-val"></b></span><input type="range" id="ls-a" min="-80" max="60" step="0.01"></label>
+            </div>
+            <div class="sse">
+              <div class="sse-text"><span>Σ(y − ŷ)² con tu recta</span><b id="ls-sse"></b></div>
+              <div class="sse-bar"><div id="ls-sse-bar"></div><i id="ls-sse-min" title="Mínimo posible"></i></div>
+              <div class="sse-foot"><span id="ls-sse-msg">Probá acercar la recta a los puntos.</span><button class="btn small" id="ls-fit" type="button">Calcular por mínimos cuadrados</button></div>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p>La regresión busca la ecuación de la recta que pasa “lo más cerca posible” de todos los puntos. ¿Qué significa “lo más cerca”? Que la suma de las distancias verticales al cuadrado entre cada punto y la recta sea mínima: por eso se llama mínimos cuadrados.</p>
+          <p><b>Interacción:</b> mover los controles de b y a. Las líneas finas son los errores de cada mes y la barra muestra Σ(y − ŷ)². Invitar a alguien del curso a probar. Después apretar “Calcular por mínimos cuadrados”: la recta va sola al mínimo, 67,97.</p>
+          <p><b>→:</b> aparece la cuenta. Primero la pendiente b con los sumatorios y después la ordenada a usando las medias: x̄ = 129,25 e ȳ = 135,90. Para calcular a conviene usar b con todos los decimales (1,14895); si no, se acumula error de redondeo. Otra forma equivalente: b = r · (Sy ÷ Sx). En Excel: =PENDIENTE(rango Y; rango X) e =INTERSECCION.EJE(rango Y; rango X).</p>
+        </aside>
+      </section>
+
+      <!-- 11 · NUESTRA RECTA -->
+      <section class="slide" data-id="recta" data-part="3" data-title="Nuestra recta de regresión">
+        <header class="slide-head">
+          <h2 class="eq-title" id="recta-eq"></h2>
+        </header>
+        <div class="split split-chart">
+          <div class="chart-box" id="recta-chart"></div>
+          <div class="side">
+            <div class="stripe ipc">
+              <h3>Pendiente b = <span id="recta-b"></span></h3>
+              <p>Por cada punto que sube el índice de precios, el de salarios sube en promedio 1,15 puntos. Como b &gt; 1, los salarios crecieron más rápido que los precios.</p>
+            </div>
+            <div class="stripe sal">
+              <h3>Ordenada a = <span id="recta-a"></span></h3>
+              <p>Sería ŷ con IPC = 0, algo imposible. Solo ubica la recta; no se interpreta.</p>
+            </div>
+            <p class="side-note">El punto oscuro es el punto de medias (x̄; ȳ) = (129,25; 135,90). La recta siempre pasa por ahí.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p>La línea azul es la recta de regresión; el punto oscuro grande es el punto de medias (129,25; 135,90), por donde la recta siempre pasa. La pendiente es positiva, igual que r.</p>
+          <p>Interpretación en las unidades del problema: “por cada punto que aumenta el índice de precios, el índice de salarios aumenta en promedio 1,15 puntos”. Que b sea mayor que 1 indica que, en este período y para el promedio de todos los trabajadores, los salarios subieron algo más rápido que los precios. Si b fuera menor que 1, los salarios estarían perdiendo contra la inflación.</p>
+          <p>La ordenada al origen no tiene sentido práctico: un índice de precios igual a cero no existe. En Excel: clic derecho sobre los puntos → Agregar línea de tendencia → Lineal, marcando “Presentar ecuación” y “Presentar R²”.</p>
+        </aside>
+      </section>
+
+      <!-- 12 · PROPIEDADES -->
+      <section class="slide" data-id="propiedades" data-part="3" data-title="Seis propiedades para recordar">
+        <header class="slide-head">
+          <h2>Seis propiedades para recordar</h2>
+          <p class="lede">Tocá cada una (o avanzá con →) para verla con nuestros datos.</p>
+        </header>
+        <div class="props">
+          <button class="prop" type="button" data-prop="1"><span class="prop-n">1</span><h3>Pasa por (x̄; ȳ)</h3><p>El punto de medias siempre está sobre la recta.</p><p class="prop-check"></p></button>
+          <button class="prop" type="button" data-prop="2"><span class="prop-n">2</span><h3>Error cuadrático mínimo</h3><p>Ninguna otra recta logra una Σ(y − ŷ)² menor.</p><p class="prop-check"></p></button>
+          <button class="prop" type="button" data-prop="3"><span class="prop-n">3</span><h3>Los residuos suman 0</h3><p>Los errores por encima y por debajo se compensan.</p><p class="prop-check"></p></button>
+          <button class="prop" type="button" data-prop="4"><span class="prop-n">4</span><h3>b y r tienen el mismo signo</h3><p>Pendiente positiva ↔ correlación positiva. b = r · Sy ÷ Sx.</p><p class="prop-check"></p></button>
+          <button class="prop" type="button" data-prop="5"><span class="prop-n">5</span><h3>Y sobre X ≠ X sobre Y</h3><p>Si se invierten las variables, la recta cambia.</p><p class="prop-check"></p></button>
+          <button class="prop" type="button" data-prop="6"><span class="prop-n">6</span><h3>Válida en el rango observado</h3><p>Fuera de los X medidos, estimar es extrapolar.</p><p class="prop-check"></p></button>
+        </div>
+        <aside class="notes">
+          <p>Repasar brevemente cada propiedad; con cada → se da vuelta una tarjeta con la verificación.</p>
+          <p>1) Se puede verificar: −12,61 + 1,149 × 129,25 ≈ 135,90 = ȳ. 2) Es la definición de mínimos cuadrados (lo vimos con los controles). 3) La columna “Residuo” del Excel suma prácticamente cero. 4) Como Sx y Sy son siempre positivos, b y r comparten signo; si r = 0, la recta es horizontal. 5) Por eso en regresión importa cuál variable es la independiente. 6) Lo vemos en la próxima diapositiva.</p>
+        </aside>
+      </section>
+
+      <!-- 13 · ESTIMAR -->
+      <section class="slide" data-id="estimar" data-part="3" data-title="Usar la recta para estimar">
+        <header class="slide-head">
+          <h2>Reemplazamos x en la ecuación</h2>
+        </header>
+        <div class="split split-chart">
+          <div class="chart-box" id="estimar-chart"></div>
+          <div class="side">
+            <span class="badge" id="est-badge">Interpolación · confiable</span>
+            <p class="est-q">¿Y si el IPC = <b id="est-x"></b>?</p>
+            <p class="mono" id="est-calc"></p>
+            <p class="est-val" id="est-y"></p>
+            <p class="side-text" id="est-msg"></p>
+            <label class="slider"><span>Elegí un valor de IPC</span><input type="range" id="est-slider" min="95" max="175" step="0.5" value="140"></label>
+            <div class="btn-row">
+              <button class="btn ghost small" data-x="140" type="button">IPC = 140</button>
+              <button class="btn ghost small" data-x="165" type="button">IPC = 165</button>
+            </div>
+            <p class="caption mono" id="est-excel"></p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><b>Interpolar</b> es estimar dentro del rango de X observado (102,2 a 159,5): es lo que la recta hace bien. Si el índice de precios vale 140, estimamos un índice de salarios de 148,2.</p>
+          <p><b>Interacción:</b> mover el control o apretar “IPC = 165”. La zona sombreada es el rango observado; fuera de ella la recta se vuelve punteada. <b>Extrapolar</b> es estimar fuera del rango: un IPC de 165 todavía no ocurrió en nuestros datos, así que no hay garantía de que la relación siga igual (177,0).</p>
+          <p>En el Excel se puede cambiar el valor de X en la hoja “Resultados” y ver la estimación al instante.</p>
+        </aside>
+      </section>
+
+      <!-- 14 · RESIDUOS -->
+      <section class="slide" data-id="residuos" data-part="3" data-title="Los residuos, mes a mes">
+        <header class="slide-head">
+          <h2>El error de cada mes: e = y − ŷ</h2>
+        </header>
+        <div class="split split-chart">
+          <div class="chart-box" id="residuos-chart"></div>
+          <div class="side">
+            <div class="res-detail" id="res-detail" aria-live="polite"></div>
+            <p class="side-text">Arriba de cero: ese mes los salarios estaban por encima de lo que predice la recta. Abajo: por debajo.</p>
+            <p class="side-text">Suma de los 20 residuos: <b id="res-sum"></b></p>
+            <div class="callout light fragment" data-step="1">
+              <h3>Forman olas</h3>
+              <p>Varios meses seguidos positivos, después varios negativos. En series de tiempo es otra señal para interpretar el modelo con cuidado.</p>
+            </div>
+            <p class="hint">Tocá una barra para ver la cuenta de ese mes.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p>El residuo es la diferencia entre el valor real y el estimado (e = y − ŷ). Agosto de 2025 tiene el residuo más grande (+3,0): real 127,7 − estimado 124,6. Marzo de 2026, uno de los más negativos (−2,7). <b>Interacción:</b> tocar las dos barras.</p>
+          <p>Los residuos suman cero, como dice la propiedad 3.</p>
+          <p><b>→:</b> un detalle para comentar: los residuos no están desordenados, forman “olas” (varios meses seguidos positivos, después varios negativos). Eso pasa mucho en series de tiempo y es otra señal de que hay que interpretar el modelo con cuidado. Pasar la palabra a <span data-integrante="4"></span>.</p>
+        </aside>
+      </section>
+
+      <!-- 15 · R² -->
+      <section class="slide dark" data-id="r2" data-part="4" data-title="R²: cuánto explica el modelo">
+        <header class="slide-head">
+          <h2>R²: cuánto explica el modelo</h2>
+        </header>
+        <div class="r2">
+          <div class="r2-num">
+            <span class="huge c-sal-soft" id="r2-val">99,2&nbsp;%</span>
+            <span class="result-sub" id="r2-sub">R² = 0,992 = (0,996)²</span>
+            <div class="seg dark" role="group" aria-label="Qué datos usar">
+              <button type="button" class="seg-btn is-on" data-mode="niveles">Niveles</button>
+              <button type="button" class="seg-btn" data-mode="mensual">Variación mensual</button>
+            </div>
+          </div>
+          <div class="r2-text">
+            <p class="r2-lead" id="r2-lead"></p>
+            <p class="r2-formula">R² = 1 − Σ(y − ŷ)² ÷ Σ(y − ȳ)²</p>
+            <p class="r2-ss" id="r2-ss"></p>
+          </div>
+        </div>
+        <div class="r2-bar"><div class="r2-fill" id="r2-fill"></div></div>
+        <div class="r2-legend"><span id="r2-leg-a"></span><span id="r2-leg-b"></span></div>
+        <aside class="notes">
+          <p>R² va de 0 a 1 (o de 0&nbsp;% a 100&nbsp;%). Mide qué proporción de la variabilidad total de Y queda explicada por la recta. En regresión lineal simple es exactamente r al cuadrado: 0,996² ≈ 0,992.</p>
+          <p>Con sumas de cuadrados: variabilidad total Σ(y−ȳ)² = 8.371,32; no explicada Σ(y−ŷ)² = 67,97; entonces R² = 1 − 67,97 ÷ 8.371,32 ≈ 0,992. Diferencia con r: r indica sentido y fuerza; R² no tiene signo y se lee como porcentaje explicado.</p>
+          <p><b>→ (o “Variación de cada mes”):</b> volviendo a la trampa: con las variaciones mensuales, r = 0,05 y R² = 0,05² ≈ 0,003, es decir 0,3&nbsp;%. El mismo fenómeno, medido de otra forma, da un ajuste casi perfecto o casi nulo.</p>
+        </aside>
+      </section>
+
+      <!-- 16 · EXCEL -->
+      <section class="slide" data-id="excel" data-part="4" data-title="Todo el análisis en Excel">
+        <header class="slide-head">
+          <h2>Todo el análisis en Excel</h2>
+          <p class="lede">Ojo con el orden: <span class="chip sal">rango Y</span> va primero en PENDIENTE, INTERSECCION.EJE y COEFICIENTE.R2. Tocá una fórmula para copiarla.</p>
+        </header>
+        <table class="xl-table" id="xl-table">
+          <thead><tr><th>Qué calculamos</th><th>Función (Excel en español)</th><th class="num">Resultado</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="xl-extra">
+          <div class="mini-card"><h3 class="c-sal">Gráfico</h3><p>Insertar › Dispersión › Agregar línea de tendencia lineal con ecuación y R².</p></div>
+          <div class="mini-card"><h3 class="c-ipc-dark">Calculadora</h3><p>Modo estadístico de regresión lineal: cargar pares (x, y) y leer A, B y r.</p></div>
+          <div class="mini-card wide"><h3>Sumatorias para resolver a mano</h3><p class="mono" id="xl-sums"></p></div>
+        </div>
+        <div class="toast" id="toast" role="status"></div>
+        <aside class="notes">
+          <p>Mostrar el archivo Excel si hay proyector. La hoja “Datos” tiene las variaciones mensuales que publica el INDEC (en azul), los índices con base diciembre 2024 = 100 calculados con fórmulas, la estimación ŷ y el residuo de cada mes (los residuos suman cero).</p>
+          <p>La hoja “Resultados” tiene todas las funciones, las sumatorias para resolver a mano (Σx = 2.585,06; Σy = 2.717,96; Σxy = 358.530,84; Σx² = 340.416,59; Σy² = 377.735,69), el gráfico con la línea de tendencia y, abajo, la correlación entre las variaciones mensuales (0,05).</p>
+          <p><b>Ojo con el orden de los argumentos:</b> PEARSON acepta cualquier orden, pero PENDIENTE, INTERSECCION.EJE y COEFICIENTE.R2 piden primero Y y después X (los colores de la tabla lo marcan). En versiones viejas de Excel PRONOSTICO.LINEAL se llama PRONOSTICO.</p>
+        </aside>
+      </section>
+
+      <!-- 17 · TP6 -->
+      <section class="slide" data-id="tp6" data-part="4" data-title="Pasos para resolver cualquier ejercicio">
+        <header class="slide-head">
+          <h2>Pasos para resolver cualquier ejercicio del TP6</h2>
+        </header>
+        <div class="split split-tp">
+          <ol class="steps">
+            <li class="fragment" data-step="1"><b>Identificar X</b> (explica) e <b>Y</b> (es explicada).</li>
+            <li class="fragment" data-step="2"><b>Graficar</b> el diagrama de dispersión.</li>
+            <li class="fragment" data-step="3"><b>Armar la tabla:</b> x, y, x², y², x·y y sus sumas.</li>
+            <li class="fragment" data-step="4"><b>Calcular r</b> e interpretar signo y fuerza.</li>
+            <li class="fragment" data-step="5"><b>Calcular b y a;</b> escribir ŷ = a + b·x.</li>
+            <li class="fragment" data-step="6"><b>Interpretar b</b> en las unidades del problema.</li>
+            <li class="fragment" data-step="7"><b>Calcular R²</b> y expresarlo en %.</li>
+            <li class="fragment" data-step="8"><b>Estimar ŷ,</b> avisando si es extrapolación.</li>
+          </ol>
+          <div class="ls-card formulas">
+            <h3>Fórmulas con sumatorias</h3>
+            <p class="mono">b = [nΣxy − Σx·Σy] ÷ [nΣx² − (Σx)²]</p>
+            <p class="mono">a = ȳ − b·x̄</p>
+            <p class="mono">r = [nΣxy − Σx·Σy] ÷ √{[nΣx² − (Σx)²]·[nΣy² − (Σy)²]}</p>
+            <p class="mono">R² = r²</p>
+            <p class="formula-note">Son equivalentes a las fórmulas con desvíos (x − x̄) y más cómodas con calculadora.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p>Esta es la receta que vamos a seguir si el profesor nos pide resolver un ejercicio del TP6 en el pizarrón. Cada → agrega un paso.</p>
+          <p>Las fórmulas con sumatorias son equivalentes a las que mostramos antes con desvíos (x − x̄) y son más cómodas para hacer a mano o con calculadora. Recordar siempre interpretar los resultados en palabras y con las unidades del problema, no solo dar el número.</p>
+        </aside>
+      </section>
+
+      <!-- 18 · REPASO -->
+      <section class="slide" data-id="quiz" data-part="4" data-title="Repaso rápido">
+        <header class="slide-head">
+          <h2>Repaso rápido: ¿qué responderían?</h2>
+          <p class="lede">Que el curso elija en voz alta y después tocamos la respuesta.</p>
+        </header>
+        <div class="quiz" id="quiz"></div>
+        <aside class="notes">
+          <p>Cuatro preguntas para chequear lo más importante. Leer cada pregunta, dejar que el curso responda y tocar la opción elegida: se marca en verde si es correcta y aparece la explicación.</p>
+          <p>Si el tiempo está justo, hacer solo las preguntas 2 y 4.</p>
+        </aside>
+      </section>
+
+      <!-- 19 · RESUMEN -->
+      <section class="slide dark" data-id="resumen" data-part="4" data-title="En resumen">
+        <div class="summary">
+          <div class="sum-item fragment" data-step="1"><b class="c-ipc-soft">r = 0,996</b><p>Relación casi perfecta entre los niveles de precios y salarios.</p></div>
+          <div class="sum-item fragment" data-step="2"><b class="c-sal-soft">b = 1,15</b><p>Los salarios subieron 1,15 puntos por cada punto de los precios.</p></div>
+          <div class="sum-item fragment" data-step="3"><b>r = 0,05</b><p>Mes a mes no hay relación: un r alto no siempre significa lo que parece.</p></div>
+        </div>
+        <p class="questions">¿Preguntas?</p>
+        <aside class="notes">
+          <p>Cerrar con las tres ideas (una por cada →): la correlación entre los niveles es casi perfecta; la regresión dice que, en promedio, los salarios subieron un poco más rápido que los precios (b = 1,15); pero cuando se mira mes a mes la relación desaparece, porque gran parte de esa correlación viene de la tendencia común.</p>
+          <p>Invitar al curso a preguntar y comentar. Si el profesor pide resolver un ejercicio del TP6, volver a la diapositiva de pasos (tecla O para ver todas).</p>
+        </aside>
+      </section>
+
+      <!-- 20 · FUENTES -->
+      <section class="slide" data-id="fuentes" data-part="0" data-title="Fuentes de los datos">
+        <header class="slide-head">
+          <h2>Fuentes de los datos</h2>
+        </header>
+        <dl class="sources">
+          <div><dt>Índice de precios al consumidor (X)</dt><dd>INDEC. IPC, cobertura nacional, nivel general, variación mensual. Informes técnicos de septiembre de 2025 y agosto de 2026 · <a href="https://www.indec.gob.ar" target="_blank" rel="noopener">indec.gob.ar</a></dd></div>
+          <div><dt>Índice de salarios (Y)</dt><dd>INDEC. Índice de salarios, total, variación mensual (cuadro 1). Informe técnico de agosto de 2026, publicado el 21/10/2026 · <a href="https://www.indec.gob.ar" target="_blank" rel="noopener">indec.gob.ar</a></dd></div>
+          <div><dt>Procesamiento</dt><dd>Índices con base diciembre 2024 = 100, calculados encadenando las variaciones. Cálculos y gráficos en Microsoft Excel: “Regresion_Salarios_Inflacion_INDEC.xlsx”. Los datos también están en <code>datos/indec_2025_2026.csv</code> de este repositorio.</dd></div>
+        </dl>
+        <aside class="notes"><p>Diapositiva de respaldo con las fuentes, para el campus virtual.</p></aside>
+      </section>
+
+    </div>
+
+    <nav class="chrome" id="chrome" aria-label="Navegación">
+      <button class="nav-btn" id="prev" type="button" aria-label="Anterior">‹</button>
+      <div class="progress" id="progress"></div>
+      <span class="counter" id="counter"></span>
+      <button class="nav-btn" id="next" type="button" aria-label="Siguiente">›</button>
+      <button class="tool-btn" id="btn-notes" type="button" title="Notas (N)">Notas</button>
+      <button class="tool-btn" id="btn-presenter" type="button" title="Modo presentador (P)">Presentador</button>
+      <button class="tool-btn" id="btn-overview" type="button" title="Todas las diapositivas (O)">Índice</button>
+      <button class="tool-btn" id="btn-full" type="button" title="Pantalla completa (F)">Pantalla completa</button>
+    </nav>
+  </main>
+
+  <div class="notes-panel" id="notes-panel" hidden>
+    <div class="notes-head"><span id="notes-who"></span><button class="tool-btn" id="notes-close" type="button">Cerrar</button></div>
+    <div class="notes-body" id="notes-body"></div>
+  </div>
+
+  <div class="overlay" id="overview" hidden>
+    <div class="overlay-inner">
+      <div class="overlay-head"><h2>Todas las diapositivas</h2><button class="tool-btn" data-close type="button">Cerrar</button></div>
+      <div class="overview-grid" id="overview-grid"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="help" hidden>
+    <div class="overlay-inner small">
+      <div class="overlay-head"><h2>Atajos de teclado</h2><button class="tool-btn" data-close type="button">Cerrar</button></div>
+      <dl class="keys">
+        <div><dt><kbd>→</kbd> <kbd>Espacio</kbd> <kbd>Av Pág</kbd></dt><dd>Siguiente paso o diapositiva</dd></div>
+        <div><dt><kbd>←</kbd> <kbd>Re Pág</kbd></dt><dd>Paso o diapositiva anterior</dd></div>
+        <div><dt><kbd>Inicio</kbd> <kbd>Fin</kbd></dt><dd>Primera o última diapositiva</dd></div>
+        <div><dt><kbd>N</kbd></dt><dd>Mostrar u ocultar las notas</dd></div>
+        <div><dt><kbd>P</kbd></dt><dd>Abrir el modo presentador en otra ventana</dd></div>
+        <div><dt><kbd>O</kbd></dt><dd>Ver todas las diapositivas</dd></div>
+        <div><dt><kbd>F</kbd></dt><dd>Pantalla completa</dd></div>
+        <div><dt><kbd>Esc</kbd></dt><dd>Cerrar paneles</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/slides.js"></script>
+  <script src="js/deck.js"></script>
+</body>
+</html>

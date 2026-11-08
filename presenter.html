@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modo presentador · Regresión y correlación</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="presenter-view">
+  <header class="pv-bar">
+    <div class="pv-who" id="pv-who">Esperando la presentación…</div>
+    <div class="pv-clock">
+      <span class="pv-elapsed" id="pv-elapsed">00:00</span>
+      <span class="pv-target" id="pv-target"></span>
+      <button class="tool-btn" id="pv-reset" type="button">Reiniciar reloj</button>
+    </div>
+  </header>
+  <main class="pv-grid">
+    <section class="pv-current">
+      <div class="pv-frame"><iframe id="pv-cur" title="Diapositiva actual" src="index.html?embed"></iframe></div>
+      <div class="pv-controls">
+        <button class="btn" id="pv-prev" type="button">Anterior</button>
+        <span id="pv-pos"></span>
+        <button class="btn" id="pv-next" type="button">Siguiente</button>
+      </div>
+    </section>
+    <aside class="pv-side">
+      <p class="pv-label" id="pv-next-label">A continuación</p>
+      <div class="pv-frame small"><iframe id="pv-nxt" title="Lo que sigue" src="index.html?embed"></iframe></div>
+      <h2 class="pv-title" id="pv-title"></h2>
+      <div class="pv-notes" id="pv-notes"></div>
+    </aside>
+  </main>
+  <p class="pv-empty" id="pv-empty" hidden>Esta ventana se maneja desde la presentación. Abrila con la tecla <kbd>P</kbd> en la ventana principal.</p>
+  <script src="js/config.js"></script>
+  <script>
+    (() => {
+      const $ = (s) => document.querySelector(s);
+      const main = window.opener;
+      const cur = $('#pv-cur'), nxt = $('#pv-nxt');
+      const mins = CONFIG.minutosPorParte;
+      let start = Date.now();
+      let last = null;
+
+      if (!main) $('#pv-empty').hidden = false;
+      const send = (msg) => { try { main && main.postMessage(msg, '*'); } catch (e) {} };
+      send({ type: 'deck-hello' });
+
+      // Las vistas previas también se escalan solas
+      const sizeFrames = () => document.querySelectorAll('.pv-frame').forEach((f) => {
+        const k = f.clientWidth / 1600;
+        f.style.height = `${900 * k}px`;
+        const i = f.querySelector('iframe');
+        i.style.transform = `scale(${k})`;
+      });
+      addEventListener('resize', sizeFrames);
+      sizeFrames();
+
+      const goFrame = (frame, index, step) => { try { frame.contentWindow.postMessage({ type: 'deck-go', index, step, instant: true }, '*'); } catch (e) {} };
+
+      function render(d) {
+        last = d;
+        $('#pv-who').textContent = d.who;
+        $('#pv-title').textContent = `${d.index + 1}. ${d.title}`;
+        $('#pv-notes').innerHTML = d.notes;
+        $('#pv-pos').textContent = `Diapositiva ${d.index + 1} de ${d.total}` + (d.maxStep ? ` · paso ${d.step} de ${d.maxStep}` : '');
+        $('#pv-target').textContent = d.part ? `Parte ${d.part}: hasta el minuto ${d.part * mins}` : '';
+        goFrame(cur, d.index, d.step);
+        if (d.step < d.maxStep) { goFrame(nxt, d.index, d.step + 1); $('#pv-next-label').textContent = 'Siguiente paso'; }
+        else if (d.index + 1 < d.total) { goFrame(nxt, d.index + 1, 0); $('#pv-next-label').textContent = `Siguiente: ${d.nextTitle} · ${d.nextWho}`; }
+        else $('#pv-next-label').textContent = 'Es la última diapositiva';
+      }
+
+      addEventListener('message', (e) => { if (e.data?.type === 'deck-state' && e.source === main) render(e.data); });
+      [cur, nxt].forEach((f) => f.addEventListener('load', () => last && render(last)));
+
+      const tick = () => {
+        const s = Math.floor((Date.now() - start) / 1000);
+        const el = $('#pv-elapsed');
+        el.textContent = `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+        el.classList.toggle('late', last && last.part && s / 60 > last.part * mins);
+      };
+      setInterval(tick, 500);
+      $('#pv-reset').addEventListener('click', () => { start = Date.now(); tick(); });
+      $('#pv-next').addEventListener('click', () => send({ type: 'deck-next' }));
+      $('#pv-prev').addEventListener('click', () => send({ type: 'deck-prev' }));
+      addEventListener('keydown', (e) => {
+        if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); send({ type: 'deck-next' }); }
+        if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); send({ type: 'deck-prev' }); }
+      });
+    })();
+  </script>
+</body>
+</html>

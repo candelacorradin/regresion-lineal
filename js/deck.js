@@ -149,7 +149,17 @@
 
   // Modo presentador: otra ventana con notas, reloj y la diapositiva siguiente
   function openPresenter() {
-    presenter = window.open(`presenter.html#${index}`, 'presentador', 'width=1280,height=800');
+    if (window.PRESENTER_HTML) {
+      // Versión de un solo archivo: la ventana del presentador se arma desde este mismo HTML
+      presenter = window.open('', 'presentador', 'width=1280,height=800');
+      if (!presenter) return;
+      const self = location.href.split('#')[0].split('?')[0];
+      presenter.document.open();
+      presenter.document.write(window.PRESENTER_HTML.replaceAll('__SELF__', self));
+      presenter.document.close();
+    } else {
+      presenter = window.open(`presenter.html#${index}`, 'presentador', 'width=1280,height=800');
+    }
     setTimeout(sendState, 600);
   }
   function sendState() {

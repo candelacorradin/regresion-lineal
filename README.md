@@ -7,6 +7,7 @@ Es HTML, CSS y JavaScript sin dependencias: las tipografías están incluidas, a
 ## Cómo abrirla
 
 - **Sin instalar nada:** abrir `index.html` con doble clic (Chrome, Edge o Firefox).
+- **Un solo archivo:** `presentacion-regresion-correlacion.html` tiene todo adentro (estilos, tipografías, scripts y modo presentador). Sirve como entregable: se abre con doble clic, sin internet.
 - **En línea (GitHub Pages):** `https://candelacorradin.github.io/regresion-lineal/`.
 
 ## Antes de presentar
@@ -71,4 +72,7 @@ js/slides.js      interacciones de cada diapositiva
 js/deck.js        navegación, notas e índice
 fonts/            Space Grotesk y Public Sans (licencia OFL)
 datos/            datos en CSV
+tools/            build_single.py: genera la versión de un solo archivo
 ```
+
+Después de cambiar algo, regenerar el archivo único con `python3 tools/build_single.py`.

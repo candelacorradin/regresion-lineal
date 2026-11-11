@@ -685,6 +685,10 @@ window.SLIDES = (() => {
         const a = $('#xlv-download');
         a.href = 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' + EXCEL.base64;
         a.download = EXCEL.nombre;
+        const g = document.createElement('button');
+        g.type = 'button'; g.className = 'xlv-tab'; g.textContent = 'Gráfico'; g.setAttribute('role', 'tab');
+        g.addEventListener('click', () => this.showChart());
+        tabs.appendChild(g);
         this.showSheet('Resultados');
       }
       v.hidden = false;
@@ -734,6 +738,33 @@ window.SLIDES = (() => {
       body.scrollTop = 0;
       $('#xlv-ref').textContent = '';
       $('#xlv-formula').textContent = 'Tocá una celda para ver su fórmula. En azul: datos cargados a mano.';
+    },
+    // El gráfico de la hoja Resultados, dibujado con los valores que están en el archivo
+    showChart() {
+      $$('.xlv-tab').forEach((b) => { const on = b.textContent === 'Gráfico'; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', on); });
+      const datos = this.wb.Sheets.Datos, res = this.wb.Sheets.Resultados;
+      const pts = [];
+      for (let r = 5; r <= 24; r++) pts.push({ mes: datos['A' + r].v, x: datos['C' + r].v, y: datos['E' + r].v });
+      const b = res.B5.v, a = res.B6.v, r2 = res.B7.v;
+      const box = document.createElement('div');
+      box.className = 'xlv-chart';
+      box.innerHTML = '<h3>Índice de salarios según índice de precios</h3>';
+      const body = $('#xlv-body');
+      body.replaceChildren(box);
+      body.scrollTop = 0;
+      const c = frame(box, { w: 1200, h: 600, m: { t: 24, r: 30, b: 66, l: 76 }, x: [100, 165], y: [100, 180], label: 'Gráfico de dispersión con línea de tendencia del Excel' });
+      c.drawAxes({ xTicks: ticks(100, 160, 10), yTicks: ticks(100, 180, 10), xLabel: 'Índice de precios (IPC) →', yLabel: '↑ Índice de salarios' });
+      el('line', { x1: c.sx(100), y1: c.sy(a + b * 100), x2: c.sx(163), y2: c.sy(a + b * 163), class: 'line sal-line thin' }, c.plot);
+      const tip = tooltip(c);
+      pts.forEach((p) => {
+        const dot = el('circle', { cx: c.sx(p.x), cy: c.sy(p.y), r: 9, class: 'dot ipc-dot' }, c.plot);
+        dot.addEventListener('pointerenter', () => tip.show(c.sx(p.x), c.sy(p.y), [p.mes, `IPC ${fmt(p.x)}`, `Salarios ${fmt(p.y)}`]));
+        dot.addEventListener('pointerleave', tip.hide);
+      });
+      el('text', { x: c.sx(104), y: c.sy(170), class: 'xlv-eq', text: `y = ${fmt(b, 3)}x ${a < 0 ? '−' : '+'} ${fmt(Math.abs(a))}` }, c.top);
+      el('text', { x: c.sx(104), y: c.sy(170) + 34, class: 'xlv-eq', text: `R² = ${fmt(r2, 3)}` }, c.top);
+      $('#xlv-ref').textContent = '';
+      $('#xlv-formula').textContent = 'Gráfico de la hoja Resultados: Insertar › Dispersión › Agregar línea de tendencia lineal, con ecuación y R².';
     },
     step(n) { if (n >= 1) this.openViewer(); else this.closeViewer(); },
     init(slide) {

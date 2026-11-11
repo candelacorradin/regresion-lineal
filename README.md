@@ -48,7 +48,7 @@ Para usar el modo presentador con proyector: abrir la presentación, apretar `P`
 | Estimar | Control de IPC con interpolación y extrapolación marcadas sobre el gráfico |
 | Residuos | Barras de cada mes y la curva de las “olas” |
 | R² | Alterna entre niveles (99,2 %) y variaciones mensuales (0,3 %) |
-| Excel | Fórmulas que se copian con un clic; los colores marcan el orden Y, X. “Ver el Excel” abre el archivo dentro de la diapositiva (pestañas Datos y Resultados, fórmula de cada celda) y permite descargarlo |
+| Excel | Fórmulas que se copian con un clic; los colores marcan el orden Y, X. “Ver el Excel” abre el archivo dentro de la diapositiva (pestañas Datos, Resultados y Gráfico, fórmula de cada celda) y permite descargarlo |
 | Repaso | Cuatro preguntas para el curso |
 
 ## Datos

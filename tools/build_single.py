@@ -45,13 +45,14 @@ def main():
 
     html = read('index.html')
     html = re.sub(r'<link rel="stylesheet" href="css/styles\.css[^"]*">', lambda m: style, html)
-    for name in ['config', 'data', 'charts', 'slides', 'deck']:
+    for name in ['vendor/xlsx.mini.min', 'excel-data', 'config', 'data', 'charts', 'slides', 'deck']:
         code = read(f'js/{name}.js')
         if name == 'config':
             code += '\n' + pres_js
-        html = re.sub(rf'<script src="js/{name}\.js[^"]*"></script>', lambda m, c=code: script_tag(c), html)
+        html = re.sub(rf'<script src="js/{re.escape(name)}\.js[^"]*"></script>', lambda m, c=code: script_tag(c), html)
 
-    leftovers = re.findall(r'(?:src|href)="(?!https?:|data:|#)[^"]+"', html)
+    # Solo etiquetas reales al inicio de línea: el código incrustado puede contener texto parecido
+    leftovers = re.findall(r'^\s*<(?:script|link|img|iframe)\b[^>]*(?:src|href)="(?!https?:|data:|#)[^"]+"', html, re.M)
     assert not leftovers, f'Quedaron referencias externas: {leftovers}'
     OUT.write_text(html, encoding='utf-8')
     print(f'{OUT.name}: {OUT.stat().st_size / 1024:.0f} KB')

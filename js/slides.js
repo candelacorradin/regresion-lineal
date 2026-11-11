@@ -656,7 +656,90 @@ window.SLIDES = (() => {
 
   /* ---------- 16 · Excel ---------- */
   const excel = {
+    steps: 1,
+    headerRows: { Datos: [4], Resultados: [3, 10, 16, 26, 35] },
+    // Excel guarda las funciones en inglés: las mostramos como se ven en Excel en español
+    fnEs: { SLOPE: 'PENDIENTE', INTERCEPT: 'INTERSECCION.EJE', RSQ: 'COEFICIENTE.R2', FORECAST: 'PRONOSTICO.LINEAL', SUM: 'SUMA', AVERAGE: 'PROMEDIO', COUNT: 'CONTAR', IF: 'SI', AND: 'Y', SQRT: 'RAIZ', SUMSQ: 'SUMA.CUADRADOS', DEVSQ: 'DESVIA2' },
+    formulaEs(f) {
+      return '=' + f.replace(/\b([A-Z][A-Z0-9.]*)\(/g, (m, n) => (this.fnEs[n] || n) + '(').replace(/,/g, '; ');
+    },
+    display(cell) {
+      if (cell.t !== 'n') return String(cell.v);
+      const m = /\.(0+)/.exec(cell.z || '');
+      const d = m ? m[1].length : cell.z && cell.z !== 'General' ? 0 : Number.isInteger(cell.v) ? 0 : 2;
+      return fmt(cell.v, d);
+    },
+    openViewer() {
+      const v = $('#xl-viewer');
+      if (!this.wb) {
+        if (!window.XLSX || !window.EXCEL) return;
+        this.wb = XLSX.read(EXCEL.base64, { type: 'base64', cellNF: true });
+        const tabs = $('#xlv-tabs');
+        this.wb.SheetNames.forEach((name) => {
+          const b = document.createElement('button');
+          b.type = 'button'; b.className = 'xlv-tab'; b.textContent = name; b.setAttribute('role', 'tab');
+          b.addEventListener('click', () => this.showSheet(name));
+          tabs.appendChild(b);
+        });
+        $('#xlv-name').textContent = EXCEL.nombre;
+        const a = $('#xlv-download');
+        a.href = 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' + EXCEL.base64;
+        a.download = EXCEL.nombre;
+        this.showSheet('Resultados');
+      }
+      v.hidden = false;
+    },
+    closeViewer() { $('#xl-viewer').hidden = true; },
+    showSheet(name) {
+      const ws = this.wb.Sheets[name];
+      const range = XLSX.utils.decode_range(ws['!ref']);
+      $$('.xlv-tab').forEach((b) => { const on = b.textContent === name; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', on); });
+      const table = document.createElement('table');
+      table.className = 'xlv-table';
+      const head = table.insertRow();
+      head.insertCell().className = 'xlv-corner';
+      for (let c = range.s.c; c <= range.e.c; c++) { const th = document.createElement('th'); th.textContent = XLSX.utils.encode_col(c); head.appendChild(th); }
+      const headers = this.headerRows[name] || [];
+      for (let r = range.s.r; r <= range.e.r; r++) {
+        const tr = table.insertRow();
+        const rh = document.createElement('th'); rh.textContent = r + 1; tr.appendChild(rh);
+        const cells = [];
+        for (let c = range.s.c; c <= range.e.c; c++) cells.push(ws[XLSX.utils.encode_cell({ r, c })]);
+        const filled = cells.filter((x) => x && x.v !== '' && x.v != null).length;
+        const lone = filled === 1 && cells[0] && !headers.includes(r + 1) && String(cells[0].v).length > 30;
+        if (headers.includes(r + 1)) tr.className = 'is-head';
+        cells.forEach((cell, i) => {
+          if (lone && i > 0) return;
+          const td = tr.insertCell();
+          if (lone) { td.colSpan = cells.length; td.className = r === 0 ? 'xlv-title' : 'xlv-note'; }
+          if (!cell || cell.v == null) return;
+          td.textContent = this.display(cell);
+          if (cell.t === 'n') td.classList.add('num');
+          if (cell.t === 'n' && !cell.f) td.classList.add('is-input');
+          if (cell.t === 's' && /^=/.test(cell.v)) td.classList.add('is-fn');
+          td.tabIndex = 0;
+          const ref = XLSX.utils.encode_cell({ r, c: range.s.c + i });
+          const pick = () => {
+            $$('.is-picked', table).forEach((n) => n.classList.remove('is-picked'));
+            td.classList.add('is-picked');
+            $('#xlv-ref').textContent = ref;
+            $('#xlv-formula').textContent = cell.f ? this.formulaEs(cell.f) : this.display(cell);
+          };
+          td.addEventListener('click', pick);
+          td.addEventListener('focus', pick);
+        });
+      }
+      const body = $('#xlv-body');
+      body.replaceChildren(table);
+      body.scrollTop = 0;
+      $('#xlv-ref').textContent = '';
+      $('#xlv-formula').textContent = 'Tocá una celda para ver su fórmula. En azul: datos cargados a mano.';
+    },
+    step(n) { if (n >= 1) this.openViewer(); else this.closeViewer(); },
     init(slide) {
+      $('#xl-open', slide).addEventListener('click', () => this.openViewer());
+      $('#xlv-close', slide).addEventListener('click', () => this.closeViewer());
+      addEventListener('keydown', (e) => { if (e.key === 'Escape') this.closeViewer(); });
       const X = '<span class="chip ipc">rango X</span>', Y = '<span class="chip sal">rango Y</span>';
       const rows = [
         ['Correlación r', `=PEARSON(${X}; ${Y})`, '=PEARSON(rango X; rango Y)', fmt(N.r, 3)],

@@ -2,7 +2,7 @@
 
 Presentación interactiva para el trabajo final de Estadística. Analiza el índice de salarios y el IPC del INDEC (enero de 2025 a agosto de 2026) con correlación de Pearson, regresión lineal simple y coeficiente de determinación.
 
-Es HTML, CSS y JavaScript sin dependencias: las tipografías están incluidas, así que funciona sin internet en el aula.
+Es HTML, CSS y JavaScript sin nada que instalar: las tipografías y la única librería (SheetJS) están incluidas, así que funciona sin internet en el aula.
 
 ## Cómo abrirla
 
@@ -48,14 +48,16 @@ Para usar el modo presentador con proyector: abrir la presentación, apretar `P`
 | Estimar | Control de IPC con interpolación y extrapolación marcadas sobre el gráfico |
 | Residuos | Barras de cada mes y la curva de las “olas” |
 | R² | Alterna entre niveles (99,2 %) y variaciones mensuales (0,3 %) |
-| Excel | Fórmulas que se copian con un clic; los colores marcan el orden Y, X |
+| Excel | Fórmulas que se copian con un clic; los colores marcan el orden Y, X. “Ver el Excel” abre el archivo dentro de la diapositiva (pestañas Datos y Resultados, fórmula de cada celda) y permite descargarlo |
 | Repaso | Cuatro preguntas para el curso |
 
 ## Datos
 
 Las variaciones mensuales que publica el INDEC están en `js/data.js`, y todos los resultados (r, b, a, R², residuos, sumatorias) se calculan en el navegador a partir de ellas. Coinciden con el Excel del grupo: r = 0,996, ŷ = −12,61 + 1,149·x, R² = 0,992 y r mensual = 0,05.
 
-`datos/indec_2025_2026.csv` tiene la misma tabla para abrir en Excel.
+`datos/Regresion_Salarios_Inflacion_INDEC.xlsx` es el Excel del trabajo (hojas Datos y Resultados, con fórmulas y gráfico); `datos/indec_2025_2026.csv` tiene la misma tabla en texto.
+
+La diapositiva de Excel muestra ese archivo con [SheetJS](https://sheetjs.com) (incluida en `js/vendor/`, licencia Apache 2.0). Si se cambia el Excel, correr `python3 tools/embed_excel.py` y después `python3 tools/build_single.py`.
 
 Fuentes: INDEC, Índice de precios al consumidor (informes técnicos de septiembre de 2025 y agosto de 2026) e Índice de salarios (informe técnico de agosto de 2026, publicado el 21/10/2026). [indec.gob.ar](https://www.indec.gob.ar)
 
@@ -67,6 +69,8 @@ presenter.html    ventana del modo presentador
 css/styles.css    estilos
 js/config.js      nombres del grupo y fecha
 js/data.js        datos del INDEC y cálculos
+js/excel-data.js  el Excel incrustado (generado)
+js/vendor/        SheetJS, para leer el Excel
 js/charts.js      utilidades para gráficos SVG
 js/slides.js      interacciones de cada diapositiva
 js/deck.js        navegación, notas e índice

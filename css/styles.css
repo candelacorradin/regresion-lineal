@@ -371,6 +371,32 @@ h1 { font-size: 138px; line-height: 0.95; font-weight: 680; letter-spacing: -0.0
 .toast { position: absolute; left: 50%; bottom: 60px; transform: translate(-50%, 20px); background: var(--navy); color: #fff; padding: 12px 22px; border-radius: 999px; font-size: 19px; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; }
 .toast.is-on { opacity: 1; transform: translate(-50%, 0); }
 
+/* Visor del Excel dentro de la diapositiva */
+.xl-open { position: absolute; right: 104px; top: 92px; }
+.xl-viewer { position: absolute; inset: 0; z-index: 5; background: var(--paper); display: flex; flex-direction: column; padding: 26px 40px 58px; }
+.xl-viewer[hidden] { display: none; }
+.xlv-bar { display: flex; align-items: center; gap: 14px; }
+.xlv-tabs { display: flex; gap: 6px; }
+.xlv-tab { border: 0; background: #e9e5dc; color: var(--muted); font-family: var(--display); font-weight: 600; font-size: 20px; padding: 10px 22px; border-radius: 10px 10px 0 0; }
+.xlv-tab.is-on { background: var(--ok); color: #fff; }
+.xlv-name { flex: 1; text-align: right; color: var(--muted); font-size: 17px; }
+.xlv-bar a.btn { text-decoration: none; }
+.xlv-fx { display: flex; gap: 16px; align-items: baseline; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--ok); padding: 8px 16px; font-family: var(--display); font-size: 20px; min-height: 48px; }
+.xlv-fx b { min-width: 52px; color: var(--ok); }
+.xlv-fx span { font-variant-numeric: tabular-nums; }
+.xlv-body { flex: 1; overflow: auto; background: #fff; border: 1px solid var(--line); border-top: 0; }
+.xlv-table { border-collapse: collapse; font-size: 15.5px; line-height: 1.3; font-variant-numeric: tabular-nums; min-width: 100%; }
+.xlv-table th { position: sticky; top: 0; background: #ece7dc; color: var(--muted); font-weight: 500; font-size: 13px; padding: 1px 8px; border: 1px solid var(--line); text-align: center; z-index: 1; }
+.xlv-table tr > th:first-child { position: sticky; left: 0; min-width: 36px; }
+.xlv-table td { border: 1px solid #ece7dc; padding: 1.5px 10px; white-space: nowrap; cursor: cell; }
+.xlv-table td.num { text-align: right; }
+.xlv-table td.is-input { color: #1f4fbf; }
+.xlv-table td.is-fn { color: var(--muted); font-style: italic; }
+.xlv-table tr.is-head td { background: var(--navy); color: #fff; font-family: var(--display); font-weight: 600; }
+.xlv-table td.xlv-title { font-family: var(--display); font-weight: 650; font-size: 19px; color: var(--navy); }
+.xlv-table td.xlv-note { color: var(--muted); font-style: italic; white-space: normal; }
+.xlv-table td.is-picked { outline: 3px solid var(--ok); outline-offset: -2px; }
+
 /* ---------- 17 · TP6 ---------- */
 .steps { list-style: none; counter-reset: s; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; grid-auto-flow: column; grid-template-rows: repeat(4, auto); gap: 22px 40px; }
 .steps li { counter-increment: s; position: relative; padding-left: 58px; font-size: 23px; line-height: 1.35; }
